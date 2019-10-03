@@ -93,6 +93,7 @@ class SectionTableView extends StatefulWidget {
 
   final ScrollController _scrollController;
   final RefreshController refreshController;
+  final ScrollPhysics physics;
 
   ScrollController get scrollController => _scrollController;
 
@@ -115,6 +116,7 @@ class SectionTableView extends StatefulWidget {
     this.enablePullUp: false,
     this.onRefresh,
     this.refreshController,
+    this.physics,
   })  : this.refreshHeaderBuilder = refreshHeaderBuilder ??
             ((BuildContext context, int mode) {
               return new ClassicIndicator(mode: mode);
@@ -387,6 +389,7 @@ class _SectionTableViewState extends State<SectionTableView> {
           onOffsetChange: _onOffsetCallback,
           child: ListView.builder(
               key: listViewKey,
+              physics: widget.physics,
               itemBuilder: (context, index) {
                 return _buildCell(context, index);
               }));
@@ -394,7 +397,7 @@ class _SectionTableViewState extends State<SectionTableView> {
 //      print('didn\'t use pull refresh');
       return ListView.builder(
           key: listViewKey,
-          physics: AlwaysScrollableScrollPhysics(),
+          physics: widget.physics ?? AlwaysScrollableScrollPhysics(),
           controller: widget.scrollController,
           itemBuilder: (context, index) {
             return _buildCell(context, index);
